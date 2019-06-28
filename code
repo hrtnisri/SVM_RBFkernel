@@ -1,0 +1,33 @@
+clear all
+clc
+
+% input data Schizophrenia
+cldata=xlsread('Schizophrenia.xlsx');
+[nrow,ncol]=size(cldata);
+
+% split data into 70% train and 30% test
+rng('default'); 
+cv = cvpartition(size(cldata,1), 'HoldOut', 0.3);
+idx = cv.test;
+dataTrain = cldata(~idx,:);
+dataTest = cldata(idx,:);
+
+% training data
+X = dataTrain(:,1:ncol-1);
+Y = dataTrain(:,ncol);
+tic
+SVMModel = fitcsvm(X,Y,'KernelFunction','rbf','KernelScale', 1/(sqrt(gamma)), 'BoxConstraint',Inf);
+CVSVMModel = crossval(SVMModel);
+
+% evaluate
+XTest = dataTest(:,1:ncol-1);
+YTest = dataTest(:,ncol);
+label = predict(SVMModel,XTest);
+
+% counting the running time
+timeElapsed=toc;
+fprintf('Running Time: %i\n', timeElapsed);
+
+% check the accuracy
+cp = classperf(YTest, label);
+fprintf('Accuracy: %i\n', cp.CorrectRate*100);
