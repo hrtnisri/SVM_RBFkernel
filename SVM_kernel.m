@@ -16,7 +16,8 @@ dataTest = cldata(idx,:);
 X = dataTrain(:,1:ncol-1);
 Y = dataTrain(:,ncol);
 tic
-SVMModel = fitcsvm(X,Y,'KernelFunction','rbf','KernelScale', 1/(sqrt(0.1)),'BoxConstraint',Inf);
+gamma = 0.001;
+SVMModel = fitcsvm(X,Y,'KernelFunction','rbf','KernelScale', gamma,'BoxConstraint',Inf);
 CVSVMModel = crossval(SVMModel);
 
 % Testing Data
