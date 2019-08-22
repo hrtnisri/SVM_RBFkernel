@@ -1,8 +1,8 @@
 clear all
 clc
 
-% Input data Schizophrenia
-cldata=xlsread('Schizophrenia.xlsx');
+% Input dataset
+cldata=xlsread('dataset.xlsx');
 [nrow,ncol]=size(cldata);
 
 % Split data into 70% train and 30% test
@@ -15,10 +15,9 @@ dataTest = cldata(idx,:);
 % Training data
 X = dataTrain(:,1:ncol-1);
 Y = dataTrain(:,ncol);
-tic
+tic 
 gamma = 0.001;
 SVMModel = fitcsvm(X,Y,'KernelFunction','rbf','KernelScale', gamma,'BoxConstraint',Inf);
-CVSVMModel = crossval(SVMModel);
 
 % Testing Data
 XTest = dataTest(:,1:ncol-1);
